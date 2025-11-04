@@ -98,6 +98,48 @@ export async function getNews(symbols?: string[]): Promise<MarketNewsArticle[]> 
   }
 }
 
+export async function getStockQuote(symbol: string): Promise<QuoteData | null> {
+  try {
+    const token = process.env.FINNHUB_API_KEY ?? NEXT_PUBLIC_FINNHUB_API_KEY;
+    if (!token) return null;
+    
+    const url = `${FINNHUB_BASE_URL}/quote?symbol=${encodeURIComponent(symbol)}&token=${token}`;
+    const data = await fetchJSON<QuoteData>(url, 60); // Cache for 1 minute
+    return data;
+  } catch (err) {
+    console.error('getStockQuote error:', err);
+    return null;
+  }
+}
+
+export async function getStockProfile(symbol: string): Promise<ProfileData | null> {
+  try {
+    const token = process.env.FINNHUB_API_KEY ?? NEXT_PUBLIC_FINNHUB_API_KEY;
+    if (!token) return null;
+    
+    const url = `${FINNHUB_BASE_URL}/stock/profile2?symbol=${encodeURIComponent(symbol)}&token=${token}`;
+    const data = await fetchJSON<ProfileData>(url, 3600); // Cache for 1 hour
+    return data;
+  } catch (err) {
+    console.error('getStockProfile error:', err);
+    return null;
+  }
+}
+
+export async function getStockFinancials(symbol: string): Promise<FinancialsData | null> {
+  try {
+    const token = process.env.FINNHUB_API_KEY ?? NEXT_PUBLIC_FINNHUB_API_KEY;
+    if (!token) return null;
+    
+    const url = `${FINNHUB_BASE_URL}/stock/metric?symbol=${encodeURIComponent(symbol)}&metric=all&token=${token}`;
+    const data = await fetchJSON<FinancialsData>(url, 3600); // Cache for 1 hour
+    return data;
+  } catch (err) {
+    console.error('getStockFinancials error:', err);
+    return null;
+  }
+}
+
 export const searchStocks = cache(async (query?: string): Promise<StockWithWatchlistStatus[]> => {
   try {
     const token = process.env.FINNHUB_API_KEY ?? NEXT_PUBLIC_FINNHUB_API_KEY;
