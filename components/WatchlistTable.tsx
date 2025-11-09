@@ -15,7 +15,8 @@ const WatchlistTable = ({ watchlist }: WatchlistTableProps) => {
 
   return (
     <div className="bg-gray-900 rounded-lg overflow-hidden">
-      <table className="w-full">
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[700px]">
         {/* Table Header */}
         <thead>
           <tr className="bg-gray-800 text-gray-300 text-sm font-medium">
@@ -74,6 +75,7 @@ const WatchlistTable = ({ watchlist }: WatchlistTableProps) => {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 };
