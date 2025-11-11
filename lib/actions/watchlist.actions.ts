@@ -5,6 +5,25 @@ import { Watchlist } from '@/database/models/watchlist.model';
 import { auth } from '@/lib/better-auth/auth';
 import { headers } from 'next/headers';
 
+export async function isSymbolInWatchlist(symbol: string): Promise<boolean> {
+  try {
+    const session = await auth.api.getSession({ headers: await headers() });
+    if (!session?.user?.id) return false;
+
+    await connectToDatabase();
+    
+    const exists = await Watchlist.exists({ 
+      userId: session.user.id, 
+      symbol: symbol.toUpperCase() 
+    });
+    
+    return !!exists;
+  } catch (err) {
+    console.error('isSymbolInWatchlist error:', err);
+    return false;
+  }
+}
+
 export async function getWatchlistSymbolsByEmail(email: string): Promise<string[]> {
   if (!email) return [];
 
