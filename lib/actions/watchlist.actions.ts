@@ -5,6 +5,12 @@ import { Watchlist } from '@/database/models/watchlist.model';
 import { auth } from '@/lib/better-auth/auth';
 import { headers } from 'next/headers';
 
+
+/**
+ * Checks if a symbol exists in user's watchlist
+ * @param symbol - Stock ticker symbol
+ * @returns Promise resolving to boolean
+ */
 export async function isSymbolInWatchlist(symbol: string): Promise<boolean> {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
